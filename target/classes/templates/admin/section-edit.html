@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>編輯卡片 — Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+  <div th:replace="~{fragments/nav-admin :: nav-admin}"></div>
+
+  <div class="admin-body site-container">
+    <div class="admin-page-header">
+      <div>
+        <div class="admin-breadcrumb">
+          Admin / <a th:href="@{/admin/homepage}">Homepage</a> / 編輯卡片
+        </div>
+        <h1 class="admin-page-title"
+            th:text="${section.groupType} + ' — ' + ${section.groupKey}"></h1>
+      </div>
+    </div>
+
+    <div class="admin-card" style="max-width:680px">
+      <form th:action="@{/admin/homepage/section/{id}/save(id=${section.id})}"
+            method="post" class="admin-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <!-- GroupKey（可修改，搬移卡片到其他 group）-->
+        <div class="admin-mgmt-group">
+          <div class="admin-mgmt-group-label">GROUP</div>
+          <div class="admin-field">
+            <label class="admin-label">GroupKey</label>
+            <input class="admin-input" name="groupKey"
+                   th:value="${section.groupKey}">
+          </div>
+          <div class="admin-field">
+            <label class="admin-label">
+              區塊大標（同 group 只需第一張填，其餘留空）
+            </label>
+            <input class="admin-input" name="sectionLabel"
+                   th:value="${section.sectionLabel}"
+                   placeholder="ABOUT / PROJECTS / SKILLS…">
+          </div>
+        </div>
+
+        <!-- SINGLE：小標題 + 內文 + tags -->
+        <th:block th:if="${section.groupType.name() == 'SINGLE'}">
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">內容</div>
+            <div class="admin-field">
+              <label class="admin-label">小標題</label>
+              <input class="admin-input" name="title" th:value="${section.title}"
+                     placeholder="以「可驗證成果」呈現能力">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">內文</label>
+              <textarea class="admin-input admin-textarea" name="body"
+                        rows="5" th:text="${section.body}"></textarea>
+            </div>
+          </div>
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">TAGS（最多 3 個）</div>
+            <div id="tagContainer" class="tag-group"></div>
+            <button type="button" class="admin-add-tag-btn"
+                    onclick="addTag()">&#43; 新增 Tag</button>
+          </div>
+        </th:block>
+
+        <!-- TWO_COL：標題 + meta + 內文（無 tags）-->
+        <th:block th:if="${section.groupType.name() == 'TWO_COL'}">
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">卡片內容</div>
+            <div class="admin-field">
+              <label class="admin-label">標題</label>
+              <input class="admin-input" name="title" th:value="${section.title}"
+                     placeholder="Portfolio Website（本網站）">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">Meta（技術棧）</label>
+              <input class="admin-input" name="subtitle" th:value="${section.subtitle}"
+                     placeholder="HTML/CSS/JS · SEO · 可擴充">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">描述</label>
+              <textarea class="admin-input admin-textarea" name="body"
+                        rows="4" th:text="${section.body}"></textarea>
+            </div>
+          </div>
+        </th:block>
+
+        <!-- TWO_ONE：標題 + 內文 + tags -->
+        <th:block th:if="${section.groupType.name() == 'TWO_ONE'}">
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">卡片內容</div>
+            <div class="admin-field">
+              <label class="admin-label">標題</label>
+              <input class="admin-input" name="title" th:value="${section.title}"
+                     placeholder="Backend">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">描述</label>
+              <textarea class="admin-input admin-textarea" name="body"
+                        rows="4" th:text="${section.body}"></textarea>
+            </div>
+          </div>
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">TAGS（最多 3 個）</div>
+            <div id="tagContainer" class="tag-group"></div>
+            <button type="button" class="admin-add-tag-btn"
+                    onclick="addTag()">&#43; 新增 Tag</button>
+          </div>
+        </th:block>
+
+        <!-- TIMELINE：年份 + 職稱 + 內文 -->
+        <th:block th:if="${section.groupType.name() == 'TIMELINE'}">
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">內容</div>
+            <div class="admin-field">
+              <label class="admin-label">年份</label>
+              <input class="admin-input" name="year" th:value="${section.year}"
+                     placeholder="2024">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">職稱 / 學校</label>
+              <input class="admin-input" name="title" th:value="${section.title}">
+            </div>
+            <div class="admin-field">
+              <label class="admin-label">說明</label>
+              <textarea class="admin-input admin-textarea" name="body"
+                        rows="4" th:text="${section.body}"></textarea>
+            </div>
+          </div>
+        </th:block>
+
+        <div style="display:flex;gap:10px;margin-top:4px">
+          <button type="submit" class="admin-btn-submit">&#10003;&ensp;儲存</button>
+          <a th:href="@{/admin/homepage}"
+             style="padding:10px 18px;border-radius:10px;text-decoration:none;
+                    display:inline-flex;align-items:center;
+                    border:1px solid var(--line);color:var(--muted)">取消</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 注入已存在的 tags 給 JS -->
+  <script th:inline="javascript">
+    const existingTags = /*[[${section.tags}]]*/ [];
+  </script>
+  <script>
+    function buildTagRow(value) {
+      const div = document.createElement('div');
+      div.className = 'tag-row';
+      div.style.cssText = 'display:flex;gap:8px;align-items:center;margin-bottom:6px';
+      div.innerHTML =
+        '<input class="admin-input" name="tags" value="' + (value || '') +
+        '" placeholder="Tag 名稱" style="flex:1">' +
+        '<button type="button" class="admin-btn-danger" style="flex-shrink:0" ' +
+        'onclick="removeTag(this)">&#10005;</button>';
+      return div;
+    }
+
+    function addTag() {
+      const container = document.getElementById('tagContainer');
+      if (!container) return;
+      if (container.querySelectorAll('.tag-row').length >= 3) {
+        alert('最多只能新增 3 個 Tag'); return;
+      }
+      container.appendChild(buildTagRow(''));
+      syncAddBtn();
+    }
+
+    function removeTag(btn) {
+      btn.closest('.tag-row').remove();
+      syncAddBtn();
+    }
+
+    function syncAddBtn() {
+      const container = document.getElementById('tagContainer');
+      if (!container) return;
+      const btn = container.nextElementSibling;
+      if (btn) btn.style.display =
+        container.querySelectorAll('.tag-row').length >= 3 ? 'none' : '';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const container = document.getElementById('tagContainer');
+      if (!container || !existingTags.length) return;
+      existingTags.forEach(t => container.appendChild(buildTagRow(t.tagValue)));
+      syncAddBtn();
+    });
+  </script>
+
+  <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

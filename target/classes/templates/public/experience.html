@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Experience - Portfolio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+</head>
+<body>
+
+  <div th:replace="~{fragments/nav :: nav}"></div>
+
+  <div class="site-container">
+
+    <header class="page-header">
+      <h1 class="page-title">Experience</h1>
+      <p class="page-desc">學習歷程與成長足跡</p>
+    </header>
+
+    <section class="page-section">
+      <div class="timeline">
+
+        <div th:each="item : ${experienceList}" class="timeline-row">
+          <div class="year" th:text="${item.year}"></div>
+          <div class="timeline-body">
+            <h3 class="timeline-title" th:text="${item.title}"></h3>
+            <p class="desc" th:text="${item.body}"></p>
+          </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(experienceList)}"
+             style="padding:40px 0;color:var(--muted);font-size:14px">
+          尚未新增任何經歷
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <div class="layout_minor">
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+  </div>
+
+  <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<div th:fragment="drawer">
+
+  <!-- DRAWER — 只在首頁使用，搭配 nav.html 一起引入 -->
+  <div class="drawer-wrapper">
+    <button class="drawer-trigger" id="drawerBtn" type="button"
+            aria-expanded="false" aria-controls="drawerPanel">
+      <span class="drawer-avatar-xs">&#128100;</span>
+      <span class="drawer-label">
+        <span th:text="${content.get('rail.name')}">Arauta</span>
+        <span class="drawer-role" th:text="${content.get('rail.role')}">Full-Stack Developer</span>
+      </span>
+      <span class="drawer-arrow" aria-hidden="true">&#9660;</span>
+    </button>
+
+    <div class="drawer-panel" id="drawerPanel" role="region" aria-label="個人資料">
+      <div class="drawer-content">
+        <div class="drawer-avatar-box" th:text="${content.get('rail.avatar')}">照片 / 頭像</div>
+
+        <div class="drawer-section">
+          <div class="drawer-section-label" th:text="${content.get('rail.profile.label')}">PROFILE</div>
+          <div class="drawer-kv">
+            <b th:text="${content.get('rail.profile.base.label')}"></b>
+            <span th:text="${content.get('rail.profile.base.value')}"></span>
+            <b th:text="${content.get('rail.profile.focus.label')}"></b>
+            <span th:text="${content.get('rail.profile.focus.value')}"></span>
+            <b th:text="${content.get('rail.profile.now.label')}"></b>
+            <span th:text="${content.get('rail.profile.now.value')}"></span>
+          </div>
+          <div class="drawer-pills">
+            <a class="drawer-pill primary" href="#projects" th:text="${content.get('rail.cta.projects')}">View Projects</a>
+            <a class="drawer-pill" href="#writing"  th:text="${content.get('rail.cta.writing')}">Writing</a>
+            <a class="drawer-pill" href="#contact"  th:text="${content.get('rail.cta.contact')}">Work with me</a>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <div class="drawer-section-label" th:text="${content.get('rail.contact.label')}">CONTACT</div>
+          <div class="drawer-kv">
+            <b th:text="${content.get('rail.contact.email.label')}"></b>
+            <span><a th:href="'mailto:' + ${content.get('rail.contact.email.value')}"
+                     th:text="${content.get('rail.contact.email.value')}"></a></span>
+            <b th:text="${content.get('rail.contact.github.label')}"></b>
+            <span><a th:href="${content.get('rail.contact.github.value')}"
+                     th:text="${content.get('rail.contact.github.text')}"
+                     target="_blank" rel="noreferrer"></a></span>
+            <b th:text="${content.get('rail.contact.linkedin.label')}"></b>
+            <span><a th:href="${content.get('rail.contact.linkedin.value')}"
+                     th:text="${content.get('rail.contact.linkedin.text')}"
+                     target="_blank" rel="noreferrer"></a></span>
+          </div>
+          <div class="drawer-section-label" th:text="${content.get('rail.highlights.label')}" style="margin-top:14px">HIGHLIGHTS</div>
+          <div class="drawer-kv">
+            <b th:text="${content.get('rail.highlights.strength.label')}"></b>
+            <span th:text="${content.get('rail.highlights.strength.value')}"></span>
+            <b th:text="${content.get('rail.highlights.style.label')}"></b>
+            <span th:text="${content.get('rail.highlights.style.value')}"></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

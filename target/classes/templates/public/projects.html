@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Projects - Portfolio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+</head>
+<body>
+
+  <div th:replace="~{fragments/nav :: nav}"></div>
+
+  <div class="site-container">
+
+    <div th:each="item : ${projectList}">
+      <section>
+
+        <div class="section-title">
+          <h2 th:text="${item.title}"></h2>
+        </div>
+
+        <div class="grid-row">
+          <div class="content-card card-full">
+
+            <div style="display:flex;gap:18px;align-items:flex-start">
+
+              <div style="flex:0 0 45%;max-width:45%">
+                <div th:if="${not #strings.isEmpty(item.videoUrl)}" class="video-wrapper">
+                  <iframe th:src="'https://www.youtube.com/embed/' + ${item.videoUrl}"
+                          frameborder="0" allowfullscreen></iframe>
+                </div>
+                <img th:if="${#strings.isEmpty(item.videoUrl) and not #strings.isEmpty(item.imageUrl)}"
+                     th:src="${item.imageUrl}" class="img-fluid"
+                     style="border-radius:8px" alt="">
+              </div>
+
+              <div style="flex:1">
+                <p th:text="${item.content}"></p>
+              </div>
+
+            </div>
+
+            <div class="tags" th:if="${not #lists.isEmpty(item.tags)}">
+              <span th:each="tag : ${item.tags}"
+                    class="tag" th:text="${tag.tagValue}"></span>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <div th:if="${#lists.isEmpty(projectList)}"
+         style="padding:60px 0;text-align:center;color:var(--muted)">
+      目前尚無項目
+    </div>
+  </div>
+
+  <div class="layout_minor">
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+  </div>
+
+  <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
