@@ -15,14 +15,15 @@
 <body>
 
   <div th:replace="~{fragments/nav :: nav}"></div>
+  <div th:replace="~{fragments/drawer :: drawer}"></div>
 
-  <div class="site-container">
+  <div class="layout">
 
     <header class="page-header">
       <h1 class="page-title">Lab</h1>
-      <p class="page-desc">小工具與實驗性作品</p>
+      <p class="page-desc">線上小工具與實驗性作品</p>
     </header>
-
+    
     <section class="page-section">
       <div class="grid-row">
 
@@ -35,7 +36,7 @@
                   class="lab-card-placeholder">&#128301;</span>
           </div>
           <h3 th:text="${item.name}"></h3>
-          <p th:text="${item.description}"></p>
+          <p th:utext="${item.description}"></p>
           <div class="tags">
             <span th:each="tag : ${item.tags}"
                   class="tag" th:text="${tag.tagValue}"></span>

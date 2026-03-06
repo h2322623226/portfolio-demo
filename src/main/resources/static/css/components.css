@@ -1,37 +1,42 @@
-
 .content-card {
-  flex: 1 1 280px;         
+  flex: 1 1 280px;
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 14px 14px 48px;
+  padding: 20px 20px 20px;
   background: var(--panel);
   position: relative;
   box-sizing: border-box;
+  transition: border-color .18s;
+}
+/* 有 tags 的卡片才保留底部空間 */
+.content-card:has(.tags) {
+  padding-bottom: 52px;
 }
 .content-card:hover {
   border-color: rgba(158,203,255,.20);
 }
 .content-card h3 {
-  margin: 0 0 6px;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -.1px;
-  color: var(--subtle);
+  color: var(--muted);
+  font-size: 17px;
+  font-family: 'Noto Serif TC', serif;
 }
 
 .content-card.card-full {
   flex: 1 1 100%;
 }
 .card-meta {
-  margin: 0 0 8px;
-  font-size: 13px;
-  color: var(--muted);
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--subtle);
+  font-family: var(--mono);
+  letter-spacing: .06em;
 }
 .content-card p {
   margin: 0;
   font-size: var(--base);
   color: var(--muted);
+  line-height: 1.75;
 }
 
 .tags {
@@ -55,32 +60,68 @@
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
 }
 .timeline-row {
   display: grid;
-  grid-template-columns: 90px 1fr;
+  grid-template-columns: 110px 1fr;
   gap: 12px;
-  padding: 10px 0;
-  border-top: 1px dashed var(--line);
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
 }
 .timeline-row:first-child { border-top: none; padding-top: 0; }
 .year {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--subtle);
-  letter-spacing: .12em;
+  letter-spacing: .08em;
   padding-top: 3px;
+  line-height: 1.4;
+  white-space: pre-line;
 }
 .timeline-row h3 {
-  margin: 0 0 4px;
-  font-size: 18px;
-  font-weight: 700;
+  margin: 0 0 5px;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text);
+  letter-spacing: -.1px;
 }
 .timeline-row .desc {
   margin: 0;
   color: var(--muted);
-  font-size: var(--base);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.skill-row {
+  display: flex;
+  align-items: baseline;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.skill-row:first-child { border-top: none; padding-top: 0; }
+.skill-label {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--subtle);
+  letter-spacing: .06em;
+  padding-top: 3px;
+  line-height: 1.4;
+}
+.skill-row .desc {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.skill-row .tags {
+  position: static;
+  margin-top: 6px;
 }
 
 .list {

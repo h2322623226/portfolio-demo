@@ -43,6 +43,12 @@
                 <input class="admin-input" name="rail.name"
                        th:value="${content.get('rail.name')}">
               </div>
+              <div class="admin-field">
+                <label class="admin-label">Avatar URL</label>
+                <input class="admin-input" name="rail.avatar"
+                       th:value="${content.get('rail.avatar')}"
+                       placeholder="https://... 圖片直連網址">
+              </div>
             </div>
             <div class="admin-mgmt-group">
               <div class="admin-mgmt-group-label">PROFILE</div>
@@ -70,14 +76,25 @@
                        th:value="${content.get('rail.contact.email.value')}">
               </div>
               <div class="admin-field">
-                <label class="admin-label">GitHub</label>
+                <label class="admin-label">GitHub URL</label>
                 <input class="admin-input" name="rail.contact.github.value"
-                       th:value="${content.get('rail.contact.github.value')}">
+                       th:value="${content.get('rail.contact.github.value')}"
+                       placeholder="https://github.com/yourname">
+              </div>
+            </div>
+            <div class="admin-mgmt-group">
+              <div class="admin-mgmt-group-label">HIGHLIGHTS</div>
+              <div class="admin-field">
+                <label class="admin-label">Currently</label>
+                <input class="admin-input" name="rail.highlights.strength.value"
+                       th:value="${content.get('rail.highlights.strength.value')}"
+                       placeholder="補修學位中 / 自學轉職">
               </div>
               <div class="admin-field">
-                <label class="admin-label">LinkedIn</label>
-                <input class="admin-input" name="rail.contact.linkedin.value"
-                       th:value="${content.get('rail.contact.linkedin.value')}">
+                <label class="admin-label">Open to</label>
+                <input class="admin-input" name="rail.highlights.style.value"
+                       th:value="${content.get('rail.highlights.style.value')}"
+                       placeholder="全端開發 / 自動化工具">
               </div>
             </div>
             <button type="submit" class="admin-btn-submit">&#10003;&ensp;儲存個人資料</button>
@@ -118,7 +135,7 @@
         <div class="admin-card">
           <div class="admin-card-header">
             <span class="admin-card-icon">&#9776;</span>
-            <h3 class="admin-card-title">現有 Section</h3>
+            <h3 class="admin-card-title">現有項目清單</h3>
             <span class="admin-count-badge"
                   th:text="${#maps.size(groupedSections)} + ' 組'">0 組</span>
           </div>

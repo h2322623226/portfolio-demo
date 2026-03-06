@@ -14,9 +14,9 @@
 <body>
 
   <div th:replace="~{fragments/nav :: nav}"></div>
+  <div th:replace="~{fragments/drawer :: drawer}"></div>
 
-  <div class="site-container">
-
+  <div class="layout">
     <header class="page-header">
       <h1 class="page-title">Experience</h1>
       <p class="page-desc">學習歷程與成長足跡</p>
@@ -29,7 +29,7 @@
           <div class="year" th:text="${item.year}"></div>
           <div class="timeline-body">
             <h3 class="timeline-title" th:text="${item.title}"></h3>
-            <p class="desc" th:text="${item.body}"></p>
+            <p class="desc" th:utext="${item.body}"></p>
           </div>
         </div>
 

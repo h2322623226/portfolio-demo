@@ -68,7 +68,7 @@
         </div>
 
         <div class="admin-mgmt-group">
-          <div class="admin-mgmt-group-label">TAGS（最多 3 個）</div>
+          <div class="admin-mgmt-group-label">TAGS（最多 5 個）</div>
           <div id="tagContainer" style="display:flex;flex-direction:column;gap:6px">
             <div th:each="tag : ${item.tags}"
                  class="tag-row" style="display:flex;gap:8px;align-items:center">
@@ -98,7 +98,7 @@
   <script>
     function addTag() {
       const c = document.getElementById('tagContainer');
-      if (c.querySelectorAll('.tag-row').length >= 3) { alert('最多 3 個 Tag'); return; }
+      if (c.querySelectorAll('.tag-row').length >= 5) { alert('最多 5 個 Tag'); return; }
       const div = document.createElement('div');
       div.className = 'tag-row';
       div.style.cssText = 'display:flex;gap:8px;align-items:center';
@@ -117,7 +117,7 @@
 
     function syncBtn() {
       const count = document.querySelectorAll('#tagContainer .tag-row').length;
-      document.getElementById('addTagBtn').style.display = count >= 3 ? 'none' : '';
+      document.getElementById('addTagBtn').style.display = count >= 5 ? 'none' : '';
     }
 
     document.addEventListener('DOMContentLoaded', syncBtn);

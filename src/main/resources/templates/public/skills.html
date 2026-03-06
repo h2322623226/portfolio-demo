@@ -14,13 +14,9 @@
 <body>
 
   <div th:replace="~{fragments/nav :: nav}"></div>
+  <div th:replace="~{fragments/drawer :: drawer}"></div>
 
-  <div class="site-container">
-
-    <header class="page-header">
-      <h1 class="page-title">Skills</h1>
-      <p class="page-desc">我的技術棧與專長領域</p>
-    </header>
+  <div class="layout">
 
     <div th:each="entry : ${groupedSections}"
          th:with="cards=${entry.value}, type=${cards[0].groupType.name()}">
@@ -34,7 +30,7 @@
         <div th:if="${type == 'SINGLE'}" class="grid-row">
           <div th:each="card : ${cards}" class="content-card card-full">
             <h3 th:text="${card.title}"></h3>
-            <p th:text="${card.body}"></p>
+            <p th:utext="${card.bodyHtml}"></p>
             <div class="tags">
               <span th:each="tag : ${card.tags}" class="tag" th:text="${tag.tagValue}"></span>
             </div>
@@ -46,7 +42,7 @@
           <article th:each="card : ${cards}" class="content-card">
             <h3 th:text="${card.title}"></h3>
             <div class="card-meta" th:text="${card.subtitle}"></div>
-            <p th:text="${card.body}"></p>
+            <p th:utext="${card.bodyHtml}"></p>
           </article>
         </div>
 
@@ -56,7 +52,7 @@
                th:classappend="${iterStat.index == 2} ? 'card-full' : ''"
                class="content-card">
             <h3 th:text="${card.title}"></h3>
-            <p th:text="${card.body}"></p>
+            <p th:utext="${card.bodyHtml}"></p>
             <div class="tags">
               <span th:each="tag : ${card.tags}" class="tag" th:text="${tag.tagValue}"></span>
             </div>
@@ -69,7 +65,17 @@
             <div class="year" th:text="${card.year}"></div>
             <div>
               <h3 th:text="${card.title}"></h3>
-              <p class="desc" th:text="${card.body}"></p>
+              <p class="desc" th:utext="${card.bodyHtml}"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILL_ROW -->
+        <div th:if="${type == 'SKILL_ROW'}" class="skill-list">
+          <div th:each="card : ${cards}" class="skill-row">
+            <div class="skill-label" th:text="${card.title}"></div>
+            <div class="tags" th:if="${not #lists.isEmpty(card.tags)}">
+              <span th:each="tag : ${card.tags}" class="tag" th:text="${tag.tagValue}"></span>
             </div>
           </div>
         </div>

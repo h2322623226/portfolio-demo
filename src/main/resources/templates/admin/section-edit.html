@@ -67,7 +67,7 @@
             </div>
           </div>
           <div class="admin-mgmt-group">
-            <div class="admin-mgmt-group-label">TAGS（最多 3 個）</div>
+            <div class="admin-mgmt-group-label">TAGS（最多 5 個）</div>
             <div id="tagContainer" class="tag-group"></div>
             <button type="button" class="admin-add-tag-btn"
                     onclick="addTag()">&#43; 新增 Tag</button>
@@ -112,7 +112,25 @@
             </div>
           </div>
           <div class="admin-mgmt-group">
-            <div class="admin-mgmt-group-label">TAGS（最多 3 個）</div>
+            <div class="admin-mgmt-group-label">TAGS（最多 5 個）</div>
+            <div id="tagContainer" class="tag-group"></div>
+            <button type="button" class="admin-add-tag-btn"
+                    onclick="addTag()">&#43; 新增 Tag</button>
+          </div>
+        </th:block>
+
+        <!-- SKILL_ROW：技能類別 + tags -->
+        <th:block th:if="${section.groupType.name() == 'SKILL_ROW'}">
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">內容</div>
+            <div class="admin-field">
+              <label class="admin-label">技術類別</label>
+              <input class="admin-input" name="title" th:value="${section.title}"
+                     placeholder="Backend / Frontend / Tools…">
+            </div>
+          </div>
+          <div class="admin-mgmt-group">
+            <div class="admin-mgmt-group-label">TAGS（最多 5 個）</div>
             <div id="tagContainer" class="tag-group"></div>
             <button type="button" class="admin-add-tag-btn"
                     onclick="addTag()">&#43; 新增 Tag</button>
@@ -153,7 +171,7 @@
 
   <!-- 注入已存在的 tags 給 JS -->
   <script th:inline="javascript">
-    const existingTags = /*[[${section.tags}]]*/ [];
+    const existingTags = /*[[${section.tags.![tagValue]}]]*/ [];
   </script>
   <script>
     function buildTagRow(value) {
@@ -171,8 +189,8 @@
     function addTag() {
       const container = document.getElementById('tagContainer');
       if (!container) return;
-      if (container.querySelectorAll('.tag-row').length >= 3) {
-        alert('最多只能新增 3 個 Tag'); return;
+      if (container.querySelectorAll('.tag-row').length >= 5) {
+        alert('最多只能新增 5 個 Tag'); return;
       }
       container.appendChild(buildTagRow(''));
       syncAddBtn();
@@ -188,13 +206,13 @@
       if (!container) return;
       const btn = container.nextElementSibling;
       if (btn) btn.style.display =
-        container.querySelectorAll('.tag-row').length >= 3 ? 'none' : '';
+        container.querySelectorAll('.tag-row').length >= 5 ? 'none' : '';
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       const container = document.getElementById('tagContainer');
       if (!container || !existingTags.length) return;
-      existingTags.forEach(t => container.appendChild(buildTagRow(t.tagValue)));
+      existingTags.forEach(t => container.appendChild(buildTagRow(t)));
       syncAddBtn();
     });
   </script>

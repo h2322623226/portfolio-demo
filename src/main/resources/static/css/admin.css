@@ -3,7 +3,10 @@
   padding-top: 10px;
   padding-bottom: 80px;
 }
-
+.admin-input option {
+  background: #1a1f27;
+  color: var(--text);
+}
 .admin-page-header {
   display: flex;
   align-items: flex-end;

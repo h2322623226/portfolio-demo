@@ -14,9 +14,8 @@
 <body>
 
   <div th:replace="~{fragments/nav :: nav}"></div>
-
-  <div class="site-container">
-
+<div th:replace="~{fragments/drawer :: drawer}"></div>
+  <div class="layout">
     <div th:each="item : ${projectList}">
       <section>
 
@@ -34,13 +33,16 @@
                   <iframe th:src="'https://www.youtube.com/embed/' + ${item.videoUrl}"
                           frameborder="0" allowfullscreen></iframe>
                 </div>
-                <img th:if="${#strings.isEmpty(item.videoUrl) and not #strings.isEmpty(item.imageUrl)}"
-                     th:src="${item.imageUrl}" class="img-fluid"
-                     style="border-radius:8px" alt="">
+                <div th:if="${#strings.isEmpty(item.videoUrl) and not #strings.isEmpty(item.imageUrl)}"
+                    class="video-wrapper">
+                  <img th:src="${item.imageUrl}"
+                      style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;border-radius:8px"
+                      alt="">
+                </div>
               </div>
 
               <div style="flex:1">
-                <p th:text="${item.content}"></p>
+                <p th:utext="${item.contentHtml}"></p>
               </div>
 
             </div>
