@@ -1,0 +1,111 @@
+
+.projects-container {
+  max-width: 900px;
+  margin: 40px auto 80px;
+  padding: 0 20px;
+}
+
+.projects-container header h1 {
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -.3px;
+  margin-bottom: 6px;
+}
+
+.projects-container header .meta {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+
+.project-item {
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px dashed var(--line);
+}
+
+.project-item:last-child {
+  border-bottom: none;
+}
+
+.project-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.2px;
+  margin-bottom: 14px;
+}
+
+.media-box {
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--panel);
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  transition: .2s ease;
+}
+
+.media-box:hover {
+  border-color: var(--subtle);
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.project-desc {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  letter-spacing: .2px;
+}
+
+.project-item:hover .project-title {
+  color: var(--accent);
+  transition: .2s ease;
+}
+
+.pagination-clean {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 60px;
+}
+
+.pagination-clean a {
+    min-width: 36px;
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--subtle);
+    transition: .2s ease;
+}
+
+.pagination-clean a:hover {
+    background: var(--panel);
+    border-color: var(--subtle);
+}
+
+.pagination-clean a.active {
+    background: var(--panel);
+    border-color: var(--subtle);
+    color: var(--text);
+}
+
+.pagination-clean a.disabled {
+    opacity: .35;
+    pointer-events: none;
+}

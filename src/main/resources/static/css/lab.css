@@ -1,0 +1,48 @@
+.lab-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 54px;
+}
+
+.lab-card-preview {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 10px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--line);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.lab-card-placeholder {
+  font-size: 28px;
+  opacity: .35;
+}
+
+.lab-open-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--subtle);
+  background: transparent;
+  text-decoration: none;
+  transition: color .15s, background .15s, border-color .15s;
+  white-space: nowrap;
+}
+
+.lab-open-btn:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,.25);
+  background: rgba(255,255,255,.06);
+  text-decoration: none;
+}

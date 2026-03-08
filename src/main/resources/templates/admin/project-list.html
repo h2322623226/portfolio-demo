@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Management — Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/components.css}">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+  <div th:replace="~{fragments/nav-admin :: nav-admin}"></div>
+
+  <div class="admin-body site-container">
+
+    <div class="admin-page-header">
+      <div>
+        <div class="admin-breadcrumb">Admin / <span>Projects</span></div>
+        <h1 class="admin-page-title">Project Management</h1>
+      </div>
+    </div>
+
+    <div class="admin-layout">
+
+      <!-- ── 左側：新增表單 ── -->
+      <aside class="admin-sidebar">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <span class="admin-card-icon">&#43;</span>
+            <h3 class="admin-card-title">新增項目</h3>
+          </div>
+
+          <form th:action="@{/admin/project/save}" method="post" class="admin-form">
+            <input type="hidden" name="pageName" value="projects">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="admin-field">
+              <label class="admin-label">Title</label>
+              <input type="text" name="title" class="admin-input" required placeholder="專案名稱">
+            </div>
+
+            <div class="admin-field">
+              <label class="admin-label">Key</label>
+              <input type="text" name="key" class="admin-input" required placeholder="唯一識別碼（英文）">
+            </div>
+
+            <div class="admin-field">
+              <label class="admin-label">Video URL</label>
+              <input type="text" name="videoUrl" class="admin-input" placeholder="YouTube ID 或 https://...">
+            </div>
+
+            <div class="admin-field">
+              <label class="admin-label">Image URL</label>
+              <input type="text" name="imageUrl" class="admin-input" placeholder="https://...">
+            </div>
+
+            <div class="admin-field">
+              <label class="admin-label">Content</label>
+              <textarea name="content" class="admin-input admin-textarea"
+                        rows="6" required placeholder="專案說明內容..."></textarea>
+            </div>
+
+            <div class="admin-mgmt-group">
+              <div class="admin-mgmt-group-label">TAGS（最多 5 個）</div>
+              <div id="newTagContainer" style="display:flex;flex-direction:column;gap:6px"></div>
+              <button type="button" class="admin-add-tag-btn"
+                      id="newAddTagBtn" onclick="addNewTag()">&#43; 新增 Tag</button>
+            </div>
+
+            <button type="submit" class="admin-btn-submit">&#10003;&ensp;儲存項目</button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- ── 右側：現有項目清單 ── -->
+      <main class="admin-main">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <span class="admin-card-icon">&#9776;</span>
+            <h3 class="admin-card-title">現有項目清單</h3>
+            <span class="admin-count-badge"
+                  th:text="${#lists.size(projectItems)} + ' 項'">0 項</span>
+          </div>
+
+          <div class="admin-list">
+            <div th:each="p : ${projectItems}" class="admin-item">
+              <div class="admin-item-info">
+                <div class="admin-item-id" th:text="'#' + ${p.id}"></div>
+                <div class="admin-item-title" th:text="${p.title}"></div>
+                <div class="admin-item-badges">
+                  <span th:if="${not #strings.isEmpty(p.videoUrl)}"
+                        class="admin-badge badge-video">VIDEO</span>
+                  <span th:if="${not #strings.isEmpty(p.imageUrl)}"
+                        class="admin-badge badge-image">IMAGE</span>
+                  <!-- Tags 預覽 -->
+                  <span th:each="tag : ${p.tags}"
+                        class="admin-badge"
+                        th:text="${tag.tagValue}"
+                        style="background:rgba(255,255,255,.07);color:var(--muted)"></span>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <a th:href="@{/admin/project/{id}/edit(id=${p.id})}"
+                   class="admin-btn-submit"
+                   style="text-decoration:none;padding:7px 13px;font-size:12.5px">
+                  編輯
+                </a>
+                <form th:action="@{/admin/project/delete}" method="post">
+                  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                  <input type="hidden" name="id" th:value="${p.id}">
+                  <button type="submit" class="admin-btn-danger"
+                          onclick="return confirm('確定要刪除此項目？')">刪除</button>
+                </form>
+              </div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(projectItems)}" class="admin-empty">
+              <span class="admin-empty-icon">&#128193;</span>
+              <p>目前尚無任何項目</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function buildTagRow(value, btnFn) {
+      const div = document.createElement('div');
+      div.className = 'tag-row';
+      div.style.cssText = 'display:flex;gap:8px;align-items:center';
+      div.innerHTML =
+        '<input class="admin-input" name="tags" value="' + (value||'') +
+        '" placeholder="Tag 名稱" style="flex:1">' +
+        '<button type="button" class="admin-btn-danger" style="flex-shrink:0" ' +
+        'onclick="' + btnFn + '(this)">&#10005;</button>';
+      return div;
+    }
+
+    function addNewTag() {
+      const c = document.getElementById('newTagContainer');
+      if (c.querySelectorAll('.tag-row').length >= 5) { alert('最多 5 個 Tag'); return; }
+      c.appendChild(buildTagRow('', 'removeNewTag'));
+      syncBtn('newTagContainer', 'newAddTagBtn');
+    }
+
+    function removeNewTag(btn) {
+      btn.closest('.tag-row').remove();
+      syncBtn('newTagContainer', 'newAddTagBtn');
+    }
+
+    function syncBtn(containerId, btnId) {
+      const count = document.querySelectorAll('#' + containerId + ' .tag-row').length;
+      const btn = document.getElementById(btnId);
+      if (btn) btn.style.display = count >= 5 ? 'none' : '';
+    }
+  </script>
+
+  <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
