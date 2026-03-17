@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "lab_item")
-public class LabItem {
+public class LabEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +31,9 @@ public class LabItem {
     @OrderBy("tagOrder ASC")
     private List<LabTag> tags = new ArrayList<>();
 
-    protected LabItem() {}
+    protected LabEntry() {}
 
-    public LabItem(String name) {
+    public LabEntry(String name) {
         this.name = name;
     }
 

@@ -12,7 +12,7 @@ public class SectionTag {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "section_item_id")
-    private SectionItem sectionItem;
+    private Section sectionItem;
 
     @Column(name = "tag_value", nullable = false, length = 50)
     private String tagValue;
@@ -22,15 +22,15 @@ public class SectionTag {
 
     protected SectionTag() {}
 
-    public SectionTag(SectionItem item, String tagValue, int tagOrder) {
+    public SectionTag(Section item, String tagValue, int tagOrder) {
         this.sectionItem = item;
         this.tagValue = tagValue;
         this.tagOrder = tagOrder;
     }
 
     public Long getId() { return id; }
-    public SectionItem getSectionItem() { return sectionItem; }
-    public void setSectionItem(SectionItem sectionItem) { this.sectionItem = sectionItem; }
+    public Section getSectionItem() { return sectionItem; }
+    public void setSectionItem(Section sectionItem) { this.sectionItem = sectionItem; }
     public String getTagValue() { return tagValue; }
     public void setTagValue(String tagValue) { this.tagValue = tagValue; }
     public int getTagOrder() { return tagOrder; }

@@ -1,8 +1,9 @@
 package com.arauta.portfolio.controller;
 
-import com.arauta.portfolio.model.SectionItem;
-import com.arauta.portfolio.service.SectionItemService;
+import com.arauta.portfolio.model.Section;
+import com.arauta.portfolio.service.SectionService;
 import com.arauta.portfolio.service.ContentService;
+import com.arauta.portfolio.util.PageNames;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +13,12 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/admin/homepage")
-public class AdminSectionController {
+public class AdminHomepageController {
 
-    private final SectionItemService sectionService;
+    private final SectionService sectionService;
     private final ContentService contentService;
 
-    public AdminSectionController(SectionItemService sectionService,
+    public AdminHomepageController(SectionService sectionService,
                                    ContentService contentService) {
         this.sectionService = sectionService;
         this.contentService = contentService;
@@ -26,26 +27,34 @@ public class AdminSectionController {
     @GetMapping
     public String homepageAdmin(Model model) {
         model.addAttribute("groupedSections",
-                sectionService.getGroupedSections("homepage"));
+                sectionService.getGroupedSections(PageNames.HOMEPAGE));
         model.addAttribute("content",
-                contentService.getPageContent("homepage"));
-        model.addAttribute("groupTypes", SectionItem.GroupType.values());
-        return "admin/homepage";               // 原: "management"
+                contentService.getPageContent(PageNames.HOMEPAGE));
+        model.addAttribute("groupTypes", Section.GroupType.values());
+        return "admin/homepage";
+    }
+
+    
+    @GetMapping("/section/{id}/edit")
+    public String editSection(@PathVariable Long id, Model model) {
+        model.addAttribute("section", sectionService.getById(id));
+        return "admin/section-edit";
     }
 
     @PostMapping("/section/create")
     public String createCard(
             @RequestParam String groupKey,
-            @RequestParam SectionItem.GroupType groupType) {
-        SectionItem created = sectionService.addCard("homepage", groupKey, groupType);
+            @RequestParam Section.GroupType groupType) {
+        Section created = sectionService.addCard(PageNames.HOMEPAGE, groupKey, groupType);
         return "redirect:/admin/homepage/section/" + created.getId() + "/edit";
     }
 
-    @GetMapping("/section/{id}/edit")
-    public String editSection(@PathVariable Long id, Model model) {
-        model.addAttribute("section", sectionService.getById(id));
-        return "admin/section-edit";           
-    }
+    @PostMapping("/rail/save")
+    public String saveRail(@RequestParam Map<String, String> allParams) {
+        allParams.remove("_csrf");
+        contentService.updatePageContent(PageNames.HOMEPAGE, allParams);
+        return "redirect:/admin/homepage?saved";
+    }    
 
     @PostMapping("/section/{id}/save")
     public String saveSection(
@@ -54,16 +63,14 @@ public class AdminSectionController {
             @RequestParam(required = false) String groupKey,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String subtitle,
-            @RequestParam(required = false) String year,
             @RequestParam(required = false) String body,
             @RequestParam(required = false) List<String> tags) {
 
-        SectionItem item = sectionService.getById(id);
+        Section item = sectionService.getById(id);
         item.setSectionLabel(sectionLabel);
         if (groupKey != null && !groupKey.isBlank()) item.setGroupKey(groupKey);
         item.setTitle(title);
         item.setSubtitle(subtitle);
-        item.setYear(year);
         item.setBody(body);
         sectionService.saveWithTags(item, tags);
         return "redirect:/admin/homepage?saved";
@@ -75,10 +82,4 @@ public class AdminSectionController {
         return "redirect:/admin/homepage?deleted";
     }
 
-    @PostMapping("/rail/save")
-    public String saveRail(@RequestParam Map<String, String> allParams) {
-        allParams.remove("_csrf");
-        contentService.updatePageContent("homepage", allParams);
-        return "redirect:/admin/homepage?saved";
-    }
 }

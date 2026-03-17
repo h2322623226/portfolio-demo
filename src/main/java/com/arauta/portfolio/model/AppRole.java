@@ -2,11 +2,6 @@ package com.arauta.portfolio.model;
 
 import jakarta.persistence.*;
 
-/**
- * [權限角色實體]
- * 關聯：多對一關聯到 AppUser。
- * 慣例：role 欄位的值存為 "ROLE_USER"、"ROLE_ADMIN"。
- */
 @Entity
 @Table(name = "app_role")
 public class AppRole {

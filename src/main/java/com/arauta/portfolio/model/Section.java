@@ -6,13 +6,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "section_item")
-public class SectionItem {
+public class Section {
 
     public enum GroupType {
         SINGLE,    // 全寬單卡（ABOUT 樣式）
         TWO_COL,   // 兩欄並排（PROJECTS 樣式）
         TWO_ONE,   // 兩小一大（SKILLS 樣式）
-        TIMELINE,  // 時間軸（EXPERIENCE 樣式）
         SKILL_ROW  // 技能橫列（SKILLS 樣式，左標題右描述+tags）
     }
 
@@ -40,17 +39,13 @@ public class SectionItem {
     @Column(name = "section_label", length = 100)
     private String sectionLabel;
 
-    /** 卡片小標題 / TIMELINE 職稱 */
+    /** 卡片小標題 */
     @Column(name = "title", length = 200)
     private String title;
 
     /** TWO_COL 的 meta 說明 / WRITING 的日期分類 */
     @Column(name = "subtitle", length = 200)
     private String subtitle;
-
-    /** TIMELINE 年份 */
-    @Column(name = "year", length = 10)
-    private String year;
 
     /** 卡片主要內文 */
     @Column(name = "body", columnDefinition = "TEXT")
@@ -60,9 +55,9 @@ public class SectionItem {
     @OrderBy("tagOrder ASC")
     private List<SectionTag> tags = new ArrayList<>();
 
-    protected SectionItem() {}
+    protected Section() {}
 
-    public SectionItem(String pageName, String groupKey, GroupType groupType, int sortOrder) {
+    public Section(String pageName, String groupKey, GroupType groupType, int sortOrder) {
         this.pageName = pageName;
         this.groupKey = groupKey;
         this.groupType = groupType;
@@ -84,8 +79,6 @@ public class SectionItem {
     public void setTitle(String title) { this.title = title; }
     public String getSubtitle() { return subtitle; }
     public void setSubtitle(String subtitle) { this.subtitle = subtitle; }
-    public String getYear() { return year; }
-    public void setYear(String year) { this.year = year; }
     public String getBody() { return body; }
     public void setBody(String body) { this.body = body; }
     public List<SectionTag> getTags() { return tags; }

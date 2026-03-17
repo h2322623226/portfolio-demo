@@ -1,43 +1,41 @@
 package com.arauta.portfolio.service;
 
-import com.arauta.portfolio.model.LabItem;
+import com.arauta.portfolio.model.LabEntry;
 import com.arauta.portfolio.model.LabTag;
-import com.arauta.portfolio.repo.LabItemRepo;
+import com.arauta.portfolio.repo.LabRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class LabItemService {
+public class LabService {
 
-    private final LabItemRepo repo;
+    private static final int MAX_TAGS = 5;
 
-    public LabItemService(LabItemRepo repo) {
+    private final LabRepo repo;
+
+    public LabService(LabRepo repo) {
         this.repo = repo;
     }
 
     @Transactional(readOnly = true)
-    public List<LabItem> getAll() {
+    public List<LabEntry> getAll() {
         return repo.findAllByOrderBySortOrderAsc();
     }
 
     @Transactional(readOnly = true)
-    public LabItem getById(Long id) {
+    public LabEntry getById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("LabItem not found: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("LabEntry not found: " + id));
     }
 
-    /**
-     * 準備一個新的 LabItem（設定 sortOrder 與欄位），但不儲存。
-     * 由 Controller 呼叫 saveWithTags() 統一完成儲存，避免重複 save。
-     */
     @Transactional(readOnly = true)
-    public LabItem prepareNew(String name, String description, String linkUrl, String imageUrl) {
+    public LabEntry prepareNew(String name, String description, String linkUrl, String imageUrl) {
         int next = repo.findTopByOrderBySortOrderDesc()
                 .map(last -> last.getSortOrder() + 1)
                 .orElse(0);
-        LabItem item = new LabItem(name);
+        LabEntry item = new LabEntry(name);
         item.setSortOrder(next);
         item.setDescription(description);
         item.setLinkUrl(linkUrl);
@@ -45,16 +43,13 @@ public class LabItemService {
         return item;
     }
 
-    /**
-     * 儲存 LabItem 並同步 tags（clear + re-insert，最多 3 個）
-     */
     @Transactional
-    public void saveWithTags(LabItem item, List<String> tagValues) {
+    public void saveWithTags(LabEntry item, List<String> tagValues) {
         item.getTags().clear();
         int order = 0;
         if (tagValues != null) {
             for (String v : tagValues) {
-                if (v != null && !v.isBlank() && order < 3) {
+                if (v != null && !v.isBlank() && order < MAX_TAGS) {
                     item.getTags().add(new LabTag(item, v.trim(), order++));
                 }
             }

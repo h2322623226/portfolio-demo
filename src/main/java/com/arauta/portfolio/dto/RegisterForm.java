@@ -3,10 +3,6 @@ package com.arauta.portfolio.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * 註冊數據傳輸對象 (DTO)
- * 負責承接前端註冊表單數據，並透過 Bean Validation 執行初步的數據合法性校驗。
- */
 public class RegisterForm {
 
     @NotBlank(message = "Username 不可為空")

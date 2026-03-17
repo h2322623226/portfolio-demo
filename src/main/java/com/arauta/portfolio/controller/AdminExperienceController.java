@@ -1,7 +1,7 @@
 package com.arauta.portfolio.controller;
 
-import com.arauta.portfolio.model.SectionItem;
-import com.arauta.portfolio.service.SectionItemService;
+import com.arauta.portfolio.model.Experience;
+import com.arauta.portfolio.service.ExperienceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,17 +10,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/experience")
 public class AdminExperienceController {
 
-    private final SectionItemService sectionService;
+    private final ExperienceService experienceService;
 
-    public AdminExperienceController(SectionItemService sectionService) {
-        this.sectionService = sectionService;
+    public AdminExperienceController(ExperienceService experienceService) {
+        this.experienceService = experienceService;
     }
 
     @GetMapping
     public String experienceAdmin(Model model) {
-        model.addAttribute("experienceList",
-                sectionService.getFlatList("experience"));
+        model.addAttribute("experienceList", experienceService.getAll());
         return "admin/experience";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editItem(@PathVariable Long id, Model model) {
+        model.addAttribute("item", experienceService.getById(id));
+        return "admin/experience-edit";
     }
 
     @PostMapping("/create")
@@ -29,18 +34,9 @@ public class AdminExperienceController {
             @RequestParam String title,
             @RequestParam(required = false) String body) {
 
-        SectionItem item = sectionService.addCard("experience", "timeline", SectionItem.GroupType.TIMELINE);
-        item.setYear(year);
-        item.setTitle(title);
-        item.setBody(body);
-        sectionService.saveWithTags(item, null);
+        Experience item = new Experience(year, title, body, experienceService.nextSortOrder());
+        experienceService.save(item);
         return "redirect:/admin/experience?saved";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String editItem(@PathVariable Long id, Model model) {
-        model.addAttribute("item", sectionService.getById(id));
-        return "admin/experience-edit";
     }
 
     @PostMapping("/{id}/save")
@@ -50,17 +46,17 @@ public class AdminExperienceController {
             @RequestParam String title,
             @RequestParam(required = false) String body) {
 
-        SectionItem item = sectionService.getById(id);
+        Experience item = experienceService.getById(id);
         item.setYear(year);
         item.setTitle(title);
         item.setBody(body);
-        sectionService.saveWithTags(item, null);
+        experienceService.save(item);
         return "redirect:/admin/experience?saved";
     }
 
     @PostMapping("/{id}/delete")
     public String deleteItem(@PathVariable Long id) {
-        sectionService.deleteById(id);
+        experienceService.deleteById(id);
         return "redirect:/admin/experience?deleted";
     }
 }
