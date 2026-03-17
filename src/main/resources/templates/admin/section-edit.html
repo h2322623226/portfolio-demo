@@ -137,27 +137,6 @@
           </div>
         </th:block>
 
-        <!-- TIMELINE：年份 + 職稱 + 內文 -->
-        <th:block th:if="${section.groupType.name() == 'TIMELINE'}">
-          <div class="admin-mgmt-group">
-            <div class="admin-mgmt-group-label">內容</div>
-            <div class="admin-field">
-              <label class="admin-label">年份</label>
-              <input class="admin-input" name="year" th:value="${section.year}"
-                     placeholder="2024">
-            </div>
-            <div class="admin-field">
-              <label class="admin-label">職稱 / 學校</label>
-              <input class="admin-input" name="title" th:value="${section.title}">
-            </div>
-            <div class="admin-field">
-              <label class="admin-label">說明</label>
-              <textarea class="admin-input admin-textarea" name="body"
-                        rows="4" th:text="${section.body}"></textarea>
-            </div>
-          </div>
-        </th:block>
-
         <div style="display:flex;gap:10px;margin-top:4px">
           <button type="submit" class="admin-btn-submit">&#10003;&ensp;儲存</button>
           <a th:href="@{/admin/homepage}"

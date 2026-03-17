@@ -52,7 +52,7 @@
               <input class="admin-input" name="imageUrl" placeholder="預覽圖 https://...">
             </div>
             <div class="admin-mgmt-group">
-              <div class="admin-mgmt-group-label">TAGS（最多 3 個）</div>
+              <div class="admin-mgmt-group-label">TAGS（最多 5 個）</div>
               <div id="tagContainer" style="display:flex;flex-direction:column;gap:6px"></div>
               <button type="button" class="admin-add-tag-btn"
                       id="addTagBtn" onclick="addTag()">&#43; 新增 Tag</button>
@@ -69,11 +69,11 @@
             <span class="admin-card-icon">&#9776;</span>
             <h3 class="admin-card-title">現有項目清單</h3>
             <span class="admin-count-badge"
-                  th:text="${#lists.size(labItems)} + ' 項'">0 項</span>
+                  th:text="${#lists.size(labEntries)} + ' 項'">0 項</span>
           </div>
 
           <div class="admin-list">
-            <div th:each="item : ${labItems}" class="admin-item">
+            <div th:each="item : ${labEntries}" class="admin-item">
               <div class="admin-item-info">
                 <div class="admin-item-id" th:text="'#' + ${item.id}"></div>
                 <div class="admin-item-title" th:text="${item.name}"></div>
@@ -100,7 +100,7 @@
               </div>
             </div>
 
-            <div th:if="${#lists.isEmpty(labItems)}" class="admin-empty">
+            <div th:if="${#lists.isEmpty(labEntries)}" class="admin-empty">
               <span class="admin-empty-icon">&#128301;</span>
               <p>尚未新增任何項目</p>
             </div>
@@ -114,7 +114,7 @@
   <script>
     function addTag() {
       const c = document.getElementById('tagContainer');
-      if (c.querySelectorAll('.tag-row').length >= 3) { alert('最多 3 個 Tag'); return; }
+      if (c.querySelectorAll('.tag-row').length >= 5) { alert('最多 5 個 Tag'); return; }
       const div = document.createElement('div');
       div.className = 'tag-row';
       div.style.cssText = 'display:flex;gap:8px;align-items:center';
@@ -131,7 +131,7 @@
     }
     function syncBtn() {
       const count = document.querySelectorAll('#tagContainer .tag-row').length;
-      document.getElementById('addTagBtn').style.display = count >= 3 ? 'none' : '';
+      document.getElementById('addTagBtn').style.display = count >= 5 ? 'none' : '';
     }
   </script>
 

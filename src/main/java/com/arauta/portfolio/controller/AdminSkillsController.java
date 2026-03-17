@@ -1,7 +1,8 @@
 package com.arauta.portfolio.controller;
 
-import com.arauta.portfolio.model.SectionItem;
-import com.arauta.portfolio.service.SectionItemService;
+import com.arauta.portfolio.model.Section;
+import com.arauta.portfolio.service.SectionService;
+import com.arauta.portfolio.util.PageNames;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,32 +13,32 @@ import java.util.List;
 @RequestMapping("/admin/skills")
 public class AdminSkillsController {
 
-    private final SectionItemService sectionService;
+    private final SectionService sectionService;
 
-    public AdminSkillsController(SectionItemService sectionService) {
+    public AdminSkillsController(SectionService sectionService) {
         this.sectionService = sectionService;
     }
 
     @GetMapping
     public String skillsAdmin(Model model) {
         model.addAttribute("groupedSections",
-                sectionService.getGroupedSections("skills"));
-        model.addAttribute("groupTypes", SectionItem.GroupType.values());
+                sectionService.getGroupedSections(PageNames.SKILLS));
+        model.addAttribute("groupTypes", Section.GroupType.values());
         return "admin/skills";
     }
 
     @PostMapping("/section/create")
     public String createCard(
             @RequestParam String groupKey,
-            @RequestParam SectionItem.GroupType groupType) {
-        SectionItem created = sectionService.addCard("skills", groupKey, groupType);
+            @RequestParam Section.GroupType groupType) {
+        Section created = sectionService.addCard(PageNames.SKILLS, groupKey, groupType);
         return "redirect:/admin/skills/section/" + created.getId() + "/edit";
     }
 
     @GetMapping("/section/{id}/edit")
     public String editSection(@PathVariable Long id, Model model) {
         model.addAttribute("section", sectionService.getById(id));
-        return "admin/section-edit";           // 共用 section-edit 頁
+        return "admin/section-edit";
     }
 
     @PostMapping("/section/{id}/save")
@@ -47,16 +48,14 @@ public class AdminSkillsController {
             @RequestParam(required = false) String groupKey,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String subtitle,
-            @RequestParam(required = false) String year,
             @RequestParam(required = false) String body,
             @RequestParam(required = false) List<String> tags) {
 
-        SectionItem item = sectionService.getById(id);
+        Section item = sectionService.getById(id);
         item.setSectionLabel(sectionLabel);
         if (groupKey != null && !groupKey.isBlank()) item.setGroupKey(groupKey);
         item.setTitle(title);
         item.setSubtitle(subtitle);
-        item.setYear(year);
         item.setBody(body);
         sectionService.saveWithTags(item, tags);
         return "redirect:/admin/skills?saved";

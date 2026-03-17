@@ -83,7 +83,7 @@
   <script>
     function addTag() {
       const c = document.getElementById('tagContainer');
-      if (c.querySelectorAll('.tag-row').length >= 3) { alert('最多 3 個 Tag'); return; }
+      if (c.querySelectorAll('.tag-row').length >= 5) { alert('最多 5 個 Tag'); return; }
       const div = document.createElement('div');
       div.className = 'tag-row';
       div.style.cssText = 'display:flex;gap:8px;align-items:center';

@@ -4,11 +4,6 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * [使用者實體]
- * 關聯：與 AppRole 為一對多關係，使用 EAGER 確保驗證時即時獲取權限。
- * 狀態：enabled 欄位對接 Spring Security 的帳號啟用檢查。
- */
 @Entity
 @Table(name = "app_user")
 public class AppUser {
@@ -40,9 +35,6 @@ public class AppUser {
         this.passwordHash = passwordHash; 
     }
 
-    /**
-     * 封裝新增角色的邏輯，自動建立與當前使用者的關聯。
-     */
     public void addRole(String role) {
         this.roles.add(new AppRole(this, role));
     }

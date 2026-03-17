@@ -10,9 +10,9 @@ public class LabTag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "lab_item_id", nullable = false)
-    private LabItem labItem;
+    private LabEntry labItem;
 
     @Column(name = "tag_value", nullable = false, length = 50)
     private String tagValue;
@@ -22,14 +22,14 @@ public class LabTag {
 
     protected LabTag() {}
 
-    public LabTag(LabItem labItem, String tagValue, int tagOrder) {
+    public LabTag(LabEntry labItem, String tagValue, int tagOrder) {
         this.labItem = labItem;
         this.tagValue = tagValue;
         this.tagOrder = tagOrder;
     }
 
     public Long getId() { return id; }
-    public LabItem getLabItem() { return labItem; }
+    public LabEntry getLabItem() { return labItem; }
     public String getTagValue() { return tagValue; }
     public void setTagValue(String v) { tagValue = v; }
     public int getTagOrder() { return tagOrder; }

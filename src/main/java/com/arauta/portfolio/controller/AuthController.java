@@ -31,6 +31,11 @@ public class AuthController {
         return "register";
     }
 
+    @GetMapping("/change-password")
+    public String changePasswordForm() {
+        return "public/change-password";
+    }
+    
     @PostMapping("/register")
     public String registerSubmit(
             @Valid @ModelAttribute("form") RegisterForm form,
@@ -52,11 +57,6 @@ public class AuthController {
         }
 
         return "redirect:/login";
-    }
-
-    @GetMapping("/change-password")
-    public String changePasswordForm() {
-        return "public/change-password";
     }
 
     @PostMapping("/change-password")

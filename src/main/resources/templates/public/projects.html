@@ -16,7 +16,7 @@
   <div th:replace="~{fragments/nav :: nav}"></div>
 <div th:replace="~{fragments/drawer :: drawer}"></div>
   <div class="layout">
-    <div th:each="item : ${projectList}">
+    <div th:each="item : ${projects}">
       <section>
 
         <div class="section-title">
@@ -58,7 +58,7 @@
       </section>
     </div>
 
-    <div th:if="${#lists.isEmpty(projectList)}"
+    <div th:if="${#lists.isEmpty(projects)}"
          style="padding:60px 0;text-align:center;color:var(--muted)">
       目前尚無項目
     </div>

@@ -16,4 +16,5 @@ public interface ContentRepo extends JpaRepository<ContentBlock, Long> {
     Optional<ContentBlock> findByPageNameAndKey(String pageName, String key);
     List<ContentBlock> findByPageNameAndKeyIn(String pageName, Collection<String> keys);
     List<ContentBlock> findByPageNameOrderByKeyAsc(String pageName);
+    List<ContentBlock> findByPageNameAndKeyStartingWith(String pageName, String prefix);
 }

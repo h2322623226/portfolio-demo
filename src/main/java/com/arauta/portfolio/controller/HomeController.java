@@ -1,11 +1,13 @@
 package com.arauta.portfolio.controller;
 
-import com.arauta.portfolio.model.ProjectItem;
+import com.arauta.portfolio.model.Experience;
+import com.arauta.portfolio.model.Project;
 import com.arauta.portfolio.service.ContentService;
-import com.arauta.portfolio.service.ProjectItemService;
-import com.arauta.portfolio.service.SectionItemService;
-import com.arauta.portfolio.service.LabItemService;
-import com.arauta.portfolio.model.SectionItem;
+import com.arauta.portfolio.service.ExperienceService;
+import com.arauta.portfolio.service.ProjectService;
+import com.arauta.portfolio.service.SectionService;
+import com.arauta.portfolio.service.LabService;
+import com.arauta.portfolio.util.PageNames;
 
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -22,47 +24,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 
     private final ContentService contentService;
-    private final ProjectItemService projectItemService;
-    private final SectionItemService sectionItemService;
-    private final LabItemService labItemService;
+    private final ProjectService projectService;
+    private final SectionService sectionService;
+    private final LabService labService;
+    private final ExperienceService experienceService;
 
     public HomeController(
         ContentService contentService,
-        ProjectItemService projectItemService,
-        SectionItemService sectionItemService,
-        LabItemService labItemService) {
+        ProjectService projectService,
+        SectionService sectionService,
+        LabService labService,
+        ExperienceService experienceService) {
         this.contentService = contentService;
-        this.projectItemService = projectItemService;
-        this.sectionItemService = sectionItemService;
-        this.labItemService = labItemService;
+        this.projectService = projectService;
+        this.sectionService = sectionService;
+        this.labService = labService;
+        this.experienceService = experienceService;
     }
 
     @GetMapping("/")
     public String homepage(Model model) {
-        model.addAttribute("content", contentService.getPageContent("homepage"));
-        model.addAttribute("groupedSections", sectionItemService.getGroupedSections("homepage"));
-        return "public/index";                 
+        model.addAttribute("content", contentService.getPageContent(PageNames.HOMEPAGE));
+        model.addAttribute("groupedSections", sectionService.getGroupedSections(PageNames.HOMEPAGE));
+        return "public/index";
     }
 
     @GetMapping("/projects")
     public String projectsPage(Model model) {
-        model.addAttribute("content", contentService.getPageContent("homepage"));
-        List<ProjectItem> projectList = projectItemService.getItemsByPage("projects");
-        model.addAttribute("projectList", projectList);
+        List<Project> projects = projectService.getAll();
+        model.addAttribute("projects", projects);
         return "public/projects";
     }
-    
+
     @GetMapping("/skills")
     public String skills(Model model) {
-        model.addAttribute("content", contentService.getPageContent("homepage"));
-        model.addAttribute("groupedSections", sectionItemService.getGroupedSections("skills"));
+        model.addAttribute("groupedSections", sectionService.getGroupedSections(PageNames.SKILLS));
         return "public/skills";
     }
 
     @GetMapping("/experience")
     public String experience(Model model) {
-        model.addAttribute("content", contentService.getPageContent("homepage"));
-        List<SectionItem> list = sectionItemService.getFlatList("experience");
+        List<Experience> list = experienceService.getAll();
         java.util.Collections.reverse(list);
         model.addAttribute("experienceList", list);
         return "public/experience";
@@ -70,8 +72,7 @@ public class HomeController {
 
     @GetMapping("/lab")
     public String lab(Model model) {
-        model.addAttribute("content", contentService.getPageContent("homepage"));
-        model.addAttribute("labItems", labItemService.getAll());
+        model.addAttribute("labEntries", labService.getAll());
         return "public/lab";
     }
 }

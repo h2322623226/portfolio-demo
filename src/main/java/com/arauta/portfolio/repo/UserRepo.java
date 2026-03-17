@@ -3,6 +3,7 @@ package com.arauta.portfolio.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import com.arauta.portfolio.model.AppUser;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
  * 繼承 JpaRepository 獲得基礎 CRUD 功能。
  * 負責所有與帳號相關的資料庫互動。
  */
+@Repository
 public interface UserRepo extends JpaRepository<AppUser, Long> {
 
     /**
