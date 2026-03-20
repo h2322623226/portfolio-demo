@@ -3,7 +3,7 @@
 A full-stack personal portfolio built with Spring Boot MVC and Thymeleaf.
 All content is managed through a custom-built CMS admin panel — no hardcoded data.
 
-🔗 **Live Demo**: https://portfolio-production-7625.up.railway.app/public/
+🔗 **Live Demo**: https://portfolio-e8wp.onrender.com/public/
 
 ---
 
