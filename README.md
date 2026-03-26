@@ -17,7 +17,6 @@ All content is managed through a custom-built CMS admin panel — no hardcoded d
 | Auth | Spring Security form login, BCrypt, role-based access |
 | ORM | Spring Data JPA / Hibernate |
 | Build | Maven |
-| Deploy | Railway |
 
 ---
 
