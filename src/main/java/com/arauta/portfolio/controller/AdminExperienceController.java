@@ -1,9 +1,12 @@
 package com.arauta.portfolio.controller;
 
+import com.arauta.portfolio.dto.ExperienceForm;
 import com.arauta.portfolio.model.Experience;
 import com.arauta.portfolio.service.ExperienceService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -30,11 +33,14 @@ public class AdminExperienceController {
 
     @PostMapping("/create")
     public String createItem(
-            @RequestParam String year,
-            @RequestParam String title,
-            @RequestParam(required = false) String body) {
-
-        Experience item = new Experience(year, title, body, experienceService.nextSortOrder());
+            @Valid @ModelAttribute("form") ExperienceForm form,
+            BindingResult bindingResult,
+            Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("experienceList", experienceService.getAll());
+            return "admin/experience";
+        }
+        Experience item = new Experience(form.getYear(), form.getTitle(), form.getBody(), experienceService.nextSortOrder());
         experienceService.save(item);
         return "redirect:/admin/experience?saved";
     }
@@ -42,14 +48,17 @@ public class AdminExperienceController {
     @PostMapping("/{id}/save")
     public String saveItem(
             @PathVariable Long id,
-            @RequestParam String year,
-            @RequestParam String title,
-            @RequestParam(required = false) String body) {
-
+            @Valid @ModelAttribute("form") ExperienceForm form,
+            BindingResult bindingResult,
+            Model model) {
         Experience item = experienceService.getById(id);
-        item.setYear(year);
-        item.setTitle(title);
-        item.setBody(body);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("item", item);
+            return "admin/experience-edit";
+        }
+        item.setYear(form.getYear());
+        item.setTitle(form.getTitle());
+        item.setBody(form.getBody());
         experienceService.save(item);
         return "redirect:/admin/experience?saved";
     }
