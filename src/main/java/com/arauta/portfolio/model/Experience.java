@@ -11,7 +11,7 @@ public class Experience {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 20)
+    @Column(name = "exp_year", length = 4)
     private String year;
 
     @Column(nullable = false, length = 200)

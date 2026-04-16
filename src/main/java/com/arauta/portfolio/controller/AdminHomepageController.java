@@ -1,14 +1,16 @@
 package com.arauta.portfolio.controller;
 
+import com.arauta.portfolio.dto.SectionForm;
 import com.arauta.portfolio.model.Section;
 import com.arauta.portfolio.service.SectionService;
 import com.arauta.portfolio.service.ContentService;
 import com.arauta.portfolio.util.PageNames;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -59,20 +61,21 @@ public class AdminHomepageController {
     @PostMapping("/section/{id}/save")
     public String saveSection(
             @PathVariable Long id,
-            @RequestParam(required = false) String sectionLabel,
-            @RequestParam(required = false) String groupKey,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String subtitle,
-            @RequestParam(required = false) String body,
-            @RequestParam(required = false) List<String> tags) {
+            @Valid @ModelAttribute("form") SectionForm form,
+            BindingResult bindingResult,
+            Model model) {
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("section", sectionService.getById(id));
+            return "admin/section-edit";
+        }
         Section item = sectionService.getById(id);
-        item.setSectionLabel(sectionLabel);
-        if (groupKey != null && !groupKey.isBlank()) item.setGroupKey(groupKey);
-        item.setTitle(title);
-        item.setSubtitle(subtitle);
-        item.setBody(body);
-        sectionService.saveWithTags(item, tags);
+        item.setSectionLabel(form.getSectionLabel());
+        if (form.getGroupKey() != null && !form.getGroupKey().isBlank()) item.setGroupKey(form.getGroupKey());
+        item.setTitle(form.getTitle());
+        item.setSubtitle(form.getSubtitle());
+        item.setBody(form.getBody());
+        sectionService.saveWithTags(item, form.getTags());
         return "redirect:/admin/homepage?saved";
     }
 

@@ -1,5 +1,6 @@
 package com.arauta.portfolio.controller;
 
+import com.arauta.portfolio.dto.ChangePasswordForm;
 import com.arauta.portfolio.dto.RegisterForm;
 import com.arauta.portfolio.service.UserService;
 
@@ -61,19 +62,20 @@ public class AuthController {
 
     @PostMapping("/change-password")
     public String changePasswordSubmit(
-            @RequestParam String oldPassword,
-            @RequestParam String newPassword,
-            @RequestParam String confirmPassword,
+            @Valid @ModelAttribute("form") ChangePasswordForm form,
+            BindingResult bindingResult,
             @AuthenticationPrincipal UserDetails currentUser,
             Model model) {
 
-        if (!newPassword.equals(confirmPassword)) {
+        if (bindingResult.hasErrors()) return "public/change-password";
+
+        if (!form.getNewPassword().equals(form.getConfirmPassword())) {
             model.addAttribute("confirmMismatch", true);
             return "/change-password";
         }
 
         try {
-            userService.changePassword(currentUser.getUsername(), oldPassword, newPassword);
+            userService.changePassword(currentUser.getUsername(), form.getOldPassword(), form.getNewPassword());
         } catch (UserService.WrongPasswordException ex) {
             model.addAttribute("wrongPassword", true);
             return "/change-password";
