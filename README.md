@@ -4,7 +4,7 @@
 
 🔗 **Live Demo（線上展示）**: https://portfolio-e8wp.onrender.com/public/
 
-![CI](https://github.com/h2322623226/portfolio/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/h2322623226/portfolio-demo/actions/workflows/ci.yml/badge.svg)
 
 ---
 
