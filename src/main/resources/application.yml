@@ -12,13 +12,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-<<<<<<< HEAD
         default_batch_fetch_size: 20
 
 server:
   port: ${PORT:8080}
-=======
-
-server:
-  port: ${PORT:8080}
->>>>>>> 2b9cfa5d9ee633f5108e4198e0acf1837153cd47
